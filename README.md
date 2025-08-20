@@ -1,0 +1,1 @@
+# schedule-scaler-operator
