@@ -1,0 +1,15 @@
+apiVersion: infra.my.domain/v1alpha1
+kind: ScheduleScaler
+metadata:
+  name: test-scaler
+spec:
+  namespace: default
+  targets:
+    - kind: Deployment
+      name: nginx
+      scaleDown: 0
+      scaleUp: 2
+  schedule:
+    scaleDown: "14:27"
+    scaleUp: "14:30"
+    days: ["Mon", "Tue", "Wed", "Thu", "Fri"]

@@ -1,0 +1,98 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
+  name: schedulescalers.infra.my.domain
+spec:
+  group: infra.my.domain
+  names:
+    kind: ScheduleScaler
+    listKind: ScheduleScalerList
+    plural: schedulescalers
+    singular: schedulescaler
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ScheduleScaler is the Schema for the schedulescalers API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ScheduleScalerSpec defines the desired state of ScheduleScaler
+            properties:
+              namespace:
+                type: string
+              schedule:
+                description: Schedule defines the scaling schedule
+                properties:
+                  days:
+                    items:
+                      type: string
+                    type: array
+                  scaleDown:
+                    type: string
+                  scaleUp:
+                    type: string
+                required:
+                - days
+                - scaleDown
+                - scaleUp
+                type: object
+              targets:
+                items:
+                  description: Target defines what resource should be scaled
+                  properties:
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                    scaleDown:
+                      format: int32
+                      type: integer
+                    scaleUp:
+                      format: int32
+                      type: integer
+                  required:
+                  - kind
+                  - name
+                  - scaleDown
+                  - scaleUp
+                  type: object
+                type: array
+            required:
+            - namespace
+            - schedule
+            - targets
+            type: object
+          status:
+            description: ScheduleScalerStatus defines the observed state of ScheduleScaler
+            properties:
+              lastAction:
+                type: string
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
